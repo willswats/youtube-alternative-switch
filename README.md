@@ -8,7 +8,7 @@ The context menu (accessed by right clicking) and keyboard shortcuts will only w
 
 - `https://youtube.com/watch?v=`
 - `https://piped.video/watch?v=`
-- `https://yewtu.be/watch?v=*"`
+- `https://yewtu.be/watch?v=`
 
 ### Keyboard Shortcuts
 
