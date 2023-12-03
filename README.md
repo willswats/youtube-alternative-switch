@@ -2,7 +2,15 @@
 
 A Firefox extension for quickly switching between YouTube, Piped, and Invidious when watching a video.
 
-## Keyboard Shortcuts
+## How to Use
+
+The context menu (accessed by right clicking) and keyboard shortcuts will only work when on any of the following domains:
+
+- `https://youtube.com/watch?v=`
+- `https://piped.video/watch?v=`
+- `https://yewtu.be/watch?v=*"`
+
+### Keyboard Shortcuts
 
 - `Ctrl+Alt+Y` - Switch to YouTube.
 - `Ctrl+Alt+P` - Switch to Piped.
