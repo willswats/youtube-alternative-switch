@@ -1,29 +1,29 @@
-window.browser = window.browser || window.chrome;
+browser = window.browser || window.chrome;
 
 const YOUTUBE_URL = "https://www.youtube.com/";
-const INVIDIOUS_URL = "https://yewtu.be/";
 const PIPED_URL = "https://piped.video/";
+const INVIDIOUS_URL = "https://yewtu.be/";
 
 const YOUTUBE_PATTERN = "*://*.youtube.com/*";
-const INVIDIOUS_PATTERN = "*://yewtu.be/*";
 const PIPED_PATTERN = "*://piped.video/*";
+const INVIDIOUS_PATTERN = "*://yewtu.be/*";
 
-window.browser.contextMenus.create({
+browser.contextMenus.create({
   title: "Switch to YouTube",
   onclick: switchYouTube,
   documentUrlPatterns: [INVIDIOUS_PATTERN, PIPED_PATTERN],
 });
 
-window.browser.contextMenus.create({
-  title: "Switch to Invidious",
-  onclick: switchInvidious,
-  documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN],
-});
-
-window.browser.contextMenus.create({
+browser.contextMenus.create({
   title: "Switch to Piped",
   onclick: switchPiped,
   documentUrlPatterns: [YOUTUBE_PATTERN, INVIDIOUS_PATTERN],
+});
+
+browser.contextMenus.create({
+  title: "Switch to Invidious",
+  onclick: switchInvidious,
+  documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN],
 });
 
 function switchYouTube(info) {
@@ -37,22 +37,22 @@ function switchYouTube(info) {
   });
 }
 
-function switchInvidious(info) {
+function switchPiped(info) {
   const currentUrl = info.pageUrl;
 
   let query = getCurrentUrlQuery(currentUrl);
-  let newUrl = INVIDIOUS_URL + query;
+  let newUrl = PIPED_URL + query;
 
   browser.tabs.update({
     url: newUrl,
   });
 }
 
-function switchPiped(info) {
+function switchInvidious(info) {
   const currentUrl = info.pageUrl;
 
   let query = getCurrentUrlQuery(currentUrl);
-  let newUrl = PIPED_URL + query;
+  let newUrl = INVIDIOUS_URL + query;
 
   browser.tabs.update({
     url: newUrl,

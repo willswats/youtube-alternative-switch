@@ -1,6 +1,6 @@
 # YouTube Alternative Switch
 
-A Firefox extension that adds context menu buttons for switching between YouTube and Invidious, as well as YouTube and Piped.
+A Firefox extension that adds context menu buttons for switching between YouTube and Piped, as well as YouTube and Invidious.
 
 ## Packaging
 
