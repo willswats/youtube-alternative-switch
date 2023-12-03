@@ -1,6 +1,6 @@
 {
   "name": "YouTube Alternative Switch",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Adds context menu buttons for switching between YouTube and Invidious, as well as YouTube and Piped.",
   "permissions": [
     "contextMenus"
