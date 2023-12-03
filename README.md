@@ -1,6 +1,14 @@
 # YouTube Alternative Switch
 
-A Firefox extension that adds context menu buttons for switching between YouTube and Piped, as well as YouTube and Invidious.
+A Firefox extension for quickly switching between YouTube, Piped, and Invidious when watching a video.
+
+## Keyboard Shortcuts
+
+- `Ctrl+Alt+Y` - Switch to YouTube.
+- `Ctrl+Alt+P` - Switch to Piped.
+- `Ctrl+Alt+I` - Switch to Invidious.
+
+The keyboard shortcuts can be changed in `about:addons` -> Manage Extension Shortcuts.
 
 ## Packaging
 

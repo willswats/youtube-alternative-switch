@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "Adds context menu buttons for switching between YouTube and Piped, as well as YouTube and Invidious.",
   "permissions": [
+    "tabs",
     "contextMenus"
   ],
   "background": {
@@ -10,5 +11,25 @@
       "./background.js"
     ]
   },
-  "manifest_version": 2
+  "manifest_version": 2,
+  "commands": {
+    "switch-youtube": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+Y"
+      },
+      "description": "Switch to YouTube."
+    },
+    "switch-piped": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+P"
+      },
+      "description": "Switch to Piped."
+    },
+    "switch-invidious": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+I"
+      },
+      "description": "Switch to Invidious."
+    }
+  }
 }
