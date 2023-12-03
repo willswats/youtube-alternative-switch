@@ -1,7 +1,7 @@
 {
   "name": "YouTube Alternative Switch",
   "version": "1.1.0",
-  "description": "Quickly switch between YouTube, Piped, and Invidious when watching a video",
+  "description": "Quickly switch between YouTube, Piped, and Invidious when watching a video.",
   "permissions": [
     "tabs",
     "contextMenus"
@@ -12,6 +12,11 @@
     ]
   },
   "manifest_version": 2,
+  "icons": {
+    "48": "./icons/logo-48.png",
+    "96": "./icons/logo-96.png",
+    "120": "./icons/logo-120.png"
+  },
   "commands": {
     "switch-youtube": {
       "suggested_key": {

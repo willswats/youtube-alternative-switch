@@ -29,3 +29,4 @@ zip -r -FS ../youtube-alternative-switch.xpi *
 ## Acknowledgements
 
 - [PipedSwitch](https://github.com/AnkhSquirrel/PipedSwitch) for showing how to create a context menu that switches between URLs.
+- [Remix Icon](https://remixicon.com/) for the icons.
