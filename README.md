@@ -4,7 +4,7 @@ A Firefox extension for quickly switching between YouTube, Piped, and Invidious 
 
 ## How to Use
 
-The context menu (accessed by right clicking) and keyboard shortcuts will only work when on any of the following domains:
+The context menu (accessed by right clicking) and keyboard shortcuts will only work when on any of the following URLs:
 
 - `https://youtube.com/watch?v=`
 - `https://piped.video/watch?v=`
