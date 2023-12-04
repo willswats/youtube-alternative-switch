@@ -1,6 +1,6 @@
 {
   "name": "YouTube Alternative Switch",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Quickly switch between YouTube, Piped, and Invidious when watching a video.",
   "permissions": [
     "tabs",
