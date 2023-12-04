@@ -18,6 +18,10 @@ const switchWebsite = (websiteUrl) => {
     }
 
     let newUrl = websiteUrl + query;
+    if (newUrl === currentUrl) {
+      return;
+    }
+
     browser.tabs.update({
       url: newUrl,
     });
