@@ -3,7 +3,7 @@ browser = window.browser;
 const YOUTUBE_URL = "https://www.youtube.com/";
 const PIPED_URL = "https://piped.video/";
 const INVIDIOUS_URL = "https://yewtu.be/";
-const CHAT_REPLAY_URL = "https://chatreplay.stream/videos/";
+const CHAT_REPLAY_URL = "https://chatreplay.stream/";
 
 const YOUTUBE_PATTERN = "*://*.youtube.com/watch?v=*";
 const PIPED_PATTERN = "*://piped.video/watch?v=*";
@@ -39,7 +39,8 @@ const getCurrentUrlQuery = (currentUrl) => {
   } else if (currentUrl.includes(PIPED_URL)) {
     query = currentUrl.split(PIPED_URL)[1];
   } else if (currentUrl.includes(CHAT_REPLAY_URL)) {
-    query = `watch?v=${currentUrl.split(CHAT_REPLAY_URL)[1]}`;
+    const chatReplaySplitUrl = `${CHAT_REPLAY_URL}videos/`;
+    query = `watch?v=${currentUrl.split(chatReplaySplitUrl)[1]}`;
   }
   return query;
 };
@@ -68,7 +69,7 @@ browser.contextMenus.create({
 
 browser.contextMenus.create({
   title: "Switch to Chat Replay",
-  onclick: () => switchWebsite(CHAT_REPLAY_URL.split("videos/")[0]),
+  onclick: () => switchWebsite(CHAT_REPLAY_URL),
   documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, INVIDIOUS_PATTERN],
 });
 
@@ -80,6 +81,6 @@ browser.commands.onCommand.addListener((command) => {
   } else if (command === "switch-invidious") {
     switchWebsite(INVIDIOUS_URL);
   } else if (command === "switch-chat-replay") {
-    switchWebsite(CHAT_REPLAY_URL.split("videos/")[0]);
+    switchWebsite(CHAT_REPLAY_URL);
   }
 });
