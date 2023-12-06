@@ -20,7 +20,9 @@ const switchWebsite = (websiteUrl) => {
     }
 
     let newUrl = websiteUrl + query;
-    if (newUrl === currentUrl) {
+    let chatReplayUrlConverted = `${currentUrl.split("videos/")[0]}watch?v=${currentUrl.split("videos/")[1]
+      }`;
+    if (newUrl === currentUrl || newUrl === chatReplayUrlConverted) {
       return;
     }
 
