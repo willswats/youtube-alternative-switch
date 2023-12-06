@@ -1,7 +1,7 @@
 {
   "name": "YouTube Alternative Switch",
   "version": "1.2.0",
-  "description": "Quickly switch between YouTube, Piped, and Invidious when watching a video.",
+  "description": "Quickly switch between YouTube, Piped, Invidious and Chat Replay when watching a video.",
   "permissions": [
     "tabs",
     "contextMenus"
@@ -35,6 +35,12 @@
         "default": "Ctrl+Alt+I"
       },
       "description": "Switch to Invidious."
+    },
+    "switch-chat-replay": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+C"
+      },
+      "description": "Switch to Chat Replay."
     }
   }
 }
