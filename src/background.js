@@ -10,6 +10,34 @@ let INVIDIOUS_URL = "https://yewtu.be/";
 let PIPED_PATTERN = `*://piped.video/watch?v=*`;
 let INVIDIOUS_PATTERN = `*://yewtu.be/watch?v=*`;
 
+const getStorageSync = () => {
+  const setPiped = ({ piped }) => {
+    console.log(piped);
+    console.log(piped);
+    if (piped !== undefined) {
+      PIPED_URL = `https://${piped}/`;
+      PIPED_PATTERN = `*://${piped}/watch?v=*`;
+    }
+  };
+
+  const setInvidious = ({ invidious }) => {
+    if (invidious !== undefined) {
+      INVIDIOUS_URL = `https://${invidious}/`;
+      INVIDIOUS_PATTERN = `*://${invidious}/watch?v=*`;
+    }
+  };
+
+  const onError = (error) => {
+    console.log(`Error: ${error}`);
+  };
+
+  let getPiped = browser.storage.sync.get("piped");
+  getPiped.then(setPiped, onError);
+
+  let getInvidious = browser.storage.sync.get("invidious");
+  getInvidious.then(setInvidious, onError);
+};
+
 const switchWebsite = (websiteUrl) => {
   browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     const currentUrl = tabs[0].url;
@@ -81,8 +109,6 @@ const createContextMenus = () => {
   });
 };
 
-createContextMenus();
-
 browser.storage.onChanged.addListener(({ piped, invidious }) => {
   PIPED_URL = `https://${piped.newValue}/`;
   PIPED_PATTERN = `*://${piped.newValue}/watch?v=*`;
@@ -105,3 +131,10 @@ browser.commands.onCommand.addListener((command) => {
     switchWebsite(CHAT_REPLAY_URL);
   }
 });
+
+const main = () => {
+  getStorageSync();
+  createContextMenus();
+};
+
+main();
