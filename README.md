@@ -11,7 +11,7 @@ The context menu (accessed by right clicking) and keyboard shortcuts will only w
 - `https://yewtu.be/watch?v=`
 - `https://chatreplay.stream/videos/`
 
-The piped and invidious URLs can be changed in `about:addons` -> Preferences.
+The Piped and Invidious URLs can be changed in `about:addons` -> Preferences. To have your preferences save upon restarting your browser, you must be signed in with your Firefox account and have `Add-ons` sync turned on in `about:preferences#sync`.
 
 ### Keyboard Shortcuts
 
@@ -22,12 +22,12 @@ The piped and invidious URLs can be changed in `about:addons` -> Preferences.
 
 The keyboard shortcuts can be changed in `about:addons` -> Manage Extension Shortcuts.
 
-## Packaging
+## Building
 
 CD to `src` and run:
 
 ```bash
-zip -r -FS ../youtube-alternative-switch.xpi *
+web-ext build -n youtube-alternative-switch.xpi
 ```
 
 ## Acknowledgements
