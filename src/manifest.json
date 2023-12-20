@@ -1,6 +1,6 @@
 {
   "name": "YouTube Alternative Switch",
-  "version": "1.3.0",
+  "version": "1.4.1",
   "description": "Quickly switch between YouTube, Piped, Invidious and Chat Replay when watching a video.",
   "permissions": [
     "tabs",
@@ -23,7 +23,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "youtube-alternative-switch@example.com"
+      "id": "{0290a66b-cebd-47e3-9475-9da502aab1ff}"
     }
   },
   "commands": {
