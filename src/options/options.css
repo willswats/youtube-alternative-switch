@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+main {
+  color: #fff;
+  background-color: #7e201d;
+  width: 100%;
+  height: 100%;
+}
+
+fieldset {
+  background-color: #711d1a;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  color: #fff;
+  background-color: #551614;
+  padding: 0.5rem;
+  width: 20rem;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+button {
+  color: #fff;
+  background-color: #551614;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+button:hover {
+  background-color: #380e0d;
+}

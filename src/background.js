@@ -1,14 +1,14 @@
 browser = window.browser;
 
 const YOUTUBE_URL = "https://www.youtube.com/";
-const PIPED_URL = "https://piped.video/";
-const INVIDIOUS_URL = "https://yewtu.be/";
 const CHAT_REPLAY_URL = "https://chatreplay.stream/";
-
 const YOUTUBE_PATTERN = "*://*.youtube.com/watch?v=*";
-const PIPED_PATTERN = "*://piped.video/watch?v=*";
-const INVIDIOUS_PATTERN = "*://yewtu.be/watch?v=*";
 const CHAT_REPLAY_PATTERN = "*://chatreplay.stream/videos/*";
+
+let PIPED_URL = "https://piped.video/";
+let INVIDIOUS_URL = "https://yewtu.be/";
+let PIPED_PATTERN = `*://piped.video/watch?v=*`;
+let INVIDIOUS_PATTERN = `*://yewtu.be/watch?v=*`;
 
 const switchWebsite = (websiteUrl) => {
   browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
@@ -47,32 +47,51 @@ const getCurrentUrlQuery = (currentUrl) => {
   return query;
 };
 
-browser.contextMenus.create({
-  title: "Switch to YouTube",
-  onclick: () => switchWebsite(YOUTUBE_URL),
-  documentUrlPatterns: [INVIDIOUS_PATTERN, PIPED_PATTERN, CHAT_REPLAY_PATTERN],
-});
+const createContextMenus = () => {
+  browser.contextMenus.create({
+    title: "Switch to YouTube",
+    onclick: () => switchWebsite(YOUTUBE_URL),
+    documentUrlPatterns: [
+      INVIDIOUS_PATTERN,
+      PIPED_PATTERN,
+      CHAT_REPLAY_PATTERN,
+    ],
+  });
 
-browser.contextMenus.create({
-  title: "Switch to Piped",
-  onclick: () => switchWebsite(PIPED_URL),
-  documentUrlPatterns: [
-    YOUTUBE_PATTERN,
-    INVIDIOUS_PATTERN,
-    CHAT_REPLAY_PATTERN,
-  ],
-});
+  browser.contextMenus.create({
+    title: "Switch to Piped",
+    onclick: () => switchWebsite(PIPED_URL),
+    documentUrlPatterns: [
+      YOUTUBE_PATTERN,
+      INVIDIOUS_PATTERN,
+      CHAT_REPLAY_PATTERN,
+    ],
+  });
 
-browser.contextMenus.create({
-  title: "Switch to Invidious",
-  onclick: () => switchWebsite(INVIDIOUS_URL),
-  documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, CHAT_REPLAY_PATTERN],
-});
+  browser.contextMenus.create({
+    title: "Switch to Invidious",
+    onclick: () => switchWebsite(INVIDIOUS_URL),
+    documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, CHAT_REPLAY_PATTERN],
+  });
 
-browser.contextMenus.create({
-  title: "Switch to Chat Replay",
-  onclick: () => switchWebsite(CHAT_REPLAY_URL),
-  documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, INVIDIOUS_PATTERN],
+  browser.contextMenus.create({
+    title: "Switch to Chat Replay",
+    onclick: () => switchWebsite(CHAT_REPLAY_URL),
+    documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, INVIDIOUS_PATTERN],
+  });
+};
+
+createContextMenus();
+
+browser.storage.onChanged.addListener(({ piped, invidious }) => {
+  PIPED_URL = `https://${piped.newValue}/`;
+  PIPED_PATTERN = `*://${piped.newValue}/watch?v=*`;
+
+  INVIDIOUS_URL = `https://${invidious.newValue}/`;
+  INVIDIOUS_PATTERN = `*://${invidious.newValue}/watch?v=*`;
+
+  browser.contextMenus.removeAll();
+  createContextMenus();
 });
 
 browser.commands.onCommand.addListener((command) => {

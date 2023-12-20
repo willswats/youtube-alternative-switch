@@ -4,7 +4,8 @@
   "description": "Quickly switch between YouTube, Piped, Invidious and Chat Replay when watching a video.",
   "permissions": [
     "tabs",
-    "contextMenus"
+    "contextMenus",
+    "storage"
   ],
   "background": {
     "scripts": [
@@ -16,6 +17,14 @@
     "48": "./icons/logo-48.png",
     "96": "./icons/logo-96.png",
     "120": "./icons/logo-120.png"
+  },
+  "options_ui": {
+    "page": "./options/options.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "youtube-alternative-switch@example.com"
+    }
   },
   "commands": {
     "switch-youtube": {
