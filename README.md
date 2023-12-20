@@ -4,12 +4,14 @@ A Firefox extension for quickly switching between YouTube, Piped, Invidious and 
 
 ## How to Use
 
-The context menu (accessed by right clicking) and keyboard shortcuts will only work on URLs starting with:
+The context menu (accessed by right clicking) and keyboard shortcuts will only work on URLs starting with (by default):
 
 - `https://youtube.com/watch?v=`
 - `https://piped.video/watch?v=`
 - `https://yewtu.be/watch?v=`
 - `https://chatreplay.stream/videos/`
+
+The piped and invidious URLs can be changed in `about:addons` -> Preferences.
 
 ### Keyboard Shortcuts
 
