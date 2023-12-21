@@ -34,6 +34,9 @@ const getStorageSync = () => {
 
   let getInvidious = browser.storage.sync.get("invidious");
   getInvidious.then(setInvidious, onError);
+
+  browser.contextMenus.removeAll();
+  createContextMenus();
 };
 
 const switchWebsite = (websiteUrl) => {
