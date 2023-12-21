@@ -12,8 +12,6 @@ let INVIDIOUS_PATTERN = `*://yewtu.be/watch?v=*`;
 
 const getStorageSync = () => {
   const setPiped = ({ piped }) => {
-    console.log(piped);
-    console.log(piped);
     if (piped !== undefined) {
       PIPED_URL = `https://${piped}/`;
       PIPED_PATTERN = `*://${piped}/watch?v=*`;
