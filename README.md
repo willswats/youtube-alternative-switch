@@ -22,6 +22,14 @@ The Piped and Invidious URLs can be changed in `about:addons` -> YouTube Alterna
 
 The keyboard shortcuts can be changed in `about:addons` -> Manage Extension Shortcuts.
 
+## Developing
+
+To install the dev dependencies:
+
+```bash
+pnpm install
+```
+
 ## Building
 
 CD to `src` and run:

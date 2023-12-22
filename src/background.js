@@ -1,6 +1,6 @@
 "use strict";
 
-browser = window.browser;
+const browser = window.browser;
 
 const YOUTUBE_URL = "https://www.youtube.com/";
 const CHAT_REPLAY_URL = "https://chatreplay.stream/";
