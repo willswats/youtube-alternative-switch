@@ -2,46 +2,49 @@
 
 const browser = window.browser;
 
-const YOUTUBE_URL = "https://www.youtube.com/";
-const CHAT_REPLAY_URL = "https://chatreplay.stream/";
-const YOUTUBE_PATTERN = "*://*.youtube.com/watch?v=*";
-const CHAT_REPLAY_PATTERN = "*://chatreplay.stream/videos/*";
+let urls = {
+  youtube: "https://www.youtube.com/",
+  chatReplay: "https://chatreplay.stream/",
+  piped: "https://piped.video/",
+  invidious: "https://yewtu.be/",
+};
 
-let PIPED_URL = "https://piped.video/";
-let INVIDIOUS_URL = "https://yewtu.be/";
-let PIPED_PATTERN = `*://piped.video/watch?v=*`;
-let INVIDIOUS_PATTERN = `*://yewtu.be/watch?v=*`;
+let patterns = {
+  youtube: "*://*.youtube.com/watch?v=*",
+  chatReplay: "*://chatreplay.stream/videos/*",
+  piped: "*://piped.video/watch?v=*",
+  invidious: "*://yewtu.be/watch?v=*",
+};
 
 const getStorageSync = async () => {
   const setPiped = ({ piped }) => {
     if (piped !== undefined) {
-      PIPED_URL = `https://${piped}/`;
-      PIPED_PATTERN = `*://${piped}/watch?v=*`;
+      urls.piped = `https://${piped}/`;
+      patterns.piped = `*://${piped}/watch?v=*`;
     }
   };
 
   const setInvidious = ({ invidious }) => {
     if (invidious !== undefined) {
-      INVIDIOUS_URL = `https://${invidious}/`;
-      INVIDIOUS_PATTERN = `*://${invidious}/watch?v=*`;
+      urls.invidious = `https://${invidious}/`;
+      patterns.invidious = `*://${invidious}/watch?v=*`;
     }
   };
 
-  const onError = (error) => {
+  try {
+    const getPiped = browser.storage.sync.get("piped");
+    const getInvidious = browser.storage.sync.get("invidious");
+
+    const pipedResult = await getPiped;
+    const invidiousResult = await getInvidious;
+
+    setPiped(pipedResult);
+    setInvidious(invidiousResult);
+
+    createContextMenus();
+  } catch (error) {
     console.log(`Error: ${error}`);
-  };
-
-  let getPiped = browser.storage.sync.get("piped");
-  getPiped.then(setPiped, onError).then(() => {
-    browser.contextMenus.removeAll();
-    createContextMenus();
-  });
-
-  let getInvidious = browser.storage.sync.get("invidious");
-  getInvidious.then(setInvidious, onError).then(() => {
-    browser.contextMenus.removeAll();
-    createContextMenus();
-  });
+  }
 };
 
 const switchWebsite = (websiteUrl) => {
@@ -56,6 +59,7 @@ const switchWebsite = (websiteUrl) => {
     let newUrl = websiteUrl + query;
     let chatReplayUrlConverted = `${currentUrl.split("videos/")[0]}watch?v=${currentUrl.split("videos/")[1]
       }`;
+
     if (newUrl === currentUrl || newUrl === chatReplayUrlConverted) {
       return;
     }
@@ -68,59 +72,65 @@ const switchWebsite = (websiteUrl) => {
 
 const getCurrentUrlQuery = (currentUrl) => {
   let query = "";
-  if (currentUrl.includes(YOUTUBE_URL)) {
-    query = currentUrl.split(YOUTUBE_URL)[1];
-  } else if (currentUrl.includes(INVIDIOUS_URL)) {
-    query = currentUrl.split(INVIDIOUS_URL)[1];
-  } else if (currentUrl.includes(PIPED_URL)) {
-    query = currentUrl.split(PIPED_URL)[1];
-  } else if (currentUrl.includes(CHAT_REPLAY_URL)) {
-    const chatReplaySplitUrl = `${CHAT_REPLAY_URL}videos/`;
+
+  if (currentUrl.includes(urls.youtube)) {
+    query = currentUrl.split(urls.youtube)[1];
+  } else if (currentUrl.includes(urls.piped)) {
+    query = currentUrl.split(urls.piped)[1];
+  } else if (currentUrl.includes(urls.invidious)) {
+    query = currentUrl.split(urls.invidious)[1];
+  } else if (currentUrl.includes(urls.chatReplay)) {
+    const chatReplaySplitUrl = `${urls.chatReplay}videos/`;
     query = `watch?v=${currentUrl.split(chatReplaySplitUrl)[1]}`;
   }
+
   return query;
 };
 
 const createContextMenus = () => {
   browser.contextMenus.create({
     title: "Switch to YouTube",
-    onclick: () => switchWebsite(YOUTUBE_URL),
+    onclick: () => switchWebsite(urls.youtube),
     documentUrlPatterns: [
-      INVIDIOUS_PATTERN,
-      PIPED_PATTERN,
-      CHAT_REPLAY_PATTERN,
+      patterns.piped,
+      patterns.invidious,
+      patterns.chatReplay,
     ],
   });
 
   browser.contextMenus.create({
     title: "Switch to Piped",
-    onclick: () => switchWebsite(PIPED_URL),
+    onclick: () => switchWebsite(urls.piped),
     documentUrlPatterns: [
-      YOUTUBE_PATTERN,
-      INVIDIOUS_PATTERN,
-      CHAT_REPLAY_PATTERN,
+      patterns.youtube,
+      patterns.invidious,
+      patterns.chatReplay,
     ],
   });
 
   browser.contextMenus.create({
     title: "Switch to Invidious",
-    onclick: () => switchWebsite(INVIDIOUS_URL),
-    documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, CHAT_REPLAY_PATTERN],
+    onclick: () => switchWebsite(urls.invidious),
+    documentUrlPatterns: [
+      patterns.youtube,
+      patterns.piped,
+      patterns.chatReplay,
+    ],
   });
 
   browser.contextMenus.create({
     title: "Switch to Chat Replay",
-    onclick: () => switchWebsite(CHAT_REPLAY_URL),
-    documentUrlPatterns: [YOUTUBE_PATTERN, PIPED_PATTERN, INVIDIOUS_PATTERN],
+    onclick: () => switchWebsite(urls.chatReplay),
+    documentUrlPatterns: [patterns.youtube, patterns.piped, patterns.invidious],
   });
 };
 
 browser.storage.onChanged.addListener(({ piped, invidious }) => {
-  PIPED_URL = `https://${piped.newValue}/`;
-  PIPED_PATTERN = `*://${piped.newValue}/watch?v=*`;
+  urls.piped = `https://${piped.newValue}/`;
+  patterns.piped = `*://${piped.newValue}/watch?v=*`;
 
-  INVIDIOUS_URL = `https://${invidious.newValue}/`;
-  INVIDIOUS_PATTERN = `*://${invidious.newValue}/watch?v=*`;
+  urls.invidious = `https://${invidious.newValue}/`;
+  patterns.invidious = `*://${invidious.newValue}/watch?v=*`;
 
   browser.contextMenus.removeAll();
   createContextMenus();
@@ -128,18 +138,17 @@ browser.storage.onChanged.addListener(({ piped, invidious }) => {
 
 browser.commands.onCommand.addListener((command) => {
   if (command == "switch-youtube") {
-    switchWebsite(YOUTUBE_URL);
+    switchWebsite(urls.youtube);
   } else if (command === "switch-piped") {
-    switchWebsite(PIPED_URL);
+    switchWebsite(urls.piped);
   } else if (command === "switch-invidious") {
-    switchWebsite(INVIDIOUS_URL);
+    switchWebsite(urls.invidious);
   } else if (command === "switch-chat-replay") {
-    switchWebsite(CHAT_REPLAY_URL);
+    switchWebsite(urls.chatReplay);
   }
 });
 
 const main = () => {
-  createContextMenus();
   getStorageSync();
 };
 

@@ -1,6 +1,6 @@
 "use strict";
 
-browser = window.browser;
+const browser = window.browser;
 
 const INITIAL_PIPED = "piped.video";
 const INITIAL_INVIDIOUS = "yewtu.be";
@@ -13,25 +13,27 @@ const saveOptions = (event) => {
   });
 };
 
-const restoreOptions = () => {
-  const setCurrentChoicePiped = (result) => {
-    document.querySelector("#piped").value = result.piped || INITIAL_PIPED;
+const restoreOptions = async () => {
+  const setCurrentChoicePiped = ({ piped }) => {
+    document.querySelector("#piped").value = piped || INITIAL_PIPED;
   };
 
-  const setCurrentChoiceInvidious = (result) => {
-    document.querySelector("#invidious").value =
-      result.invidious || INITIAL_INVIDIOUS;
+  const setCurrentChoiceInvidious = ({ invidious }) => {
+    document.querySelector("#invidious").value = invidious || INITIAL_INVIDIOUS;
   };
 
-  const onError = (error) => {
+  try {
+    const getPiped = browser.storage.sync.get("piped");
+    const getInvidious = browser.storage.sync.get("invidious");
+
+    const pipedResult = await getPiped;
+    const invidiousResult = await getInvidious;
+
+    setCurrentChoicePiped(pipedResult);
+    setCurrentChoiceInvidious(invidiousResult);
+  } catch (error) {
     console.log(`Error: ${error}`);
-  };
-
-  let getPiped = browser.storage.sync.get("piped");
-  getPiped.then(setCurrentChoicePiped, onError);
-
-  let getInvidious = browser.storage.sync.get("invidious");
-  getInvidious.then(setCurrentChoiceInvidious, onError);
+  }
 };
 
 document.addEventListener("DOMContentLoaded", restoreOptions);
