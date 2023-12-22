@@ -1,3 +1,5 @@
+"use strict";
+
 browser = window.browser;
 
 const YOUTUBE_URL = "https://www.youtube.com/";
@@ -10,7 +12,7 @@ let INVIDIOUS_URL = "https://yewtu.be/";
 let PIPED_PATTERN = `*://piped.video/watch?v=*`;
 let INVIDIOUS_PATTERN = `*://yewtu.be/watch?v=*`;
 
-const getStorageSync = () => {
+const getStorageSync = async () => {
   const setPiped = ({ piped }) => {
     if (piped !== undefined) {
       PIPED_URL = `https://${piped}/`;
@@ -30,13 +32,16 @@ const getStorageSync = () => {
   };
 
   let getPiped = browser.storage.sync.get("piped");
-  getPiped.then(setPiped, onError);
+  getPiped.then(setPiped, onError).then(() => {
+    browser.contextMenus.removeAll();
+    createContextMenus();
+  });
 
   let getInvidious = browser.storage.sync.get("invidious");
-  getInvidious.then(setInvidious, onError);
-
-  browser.contextMenus.removeAll();
-  createContextMenus();
+  getInvidious.then(setInvidious, onError).then(() => {
+    browser.contextMenus.removeAll();
+    createContextMenus();
+  });
 };
 
 const switchWebsite = (websiteUrl) => {
@@ -134,8 +139,8 @@ browser.commands.onCommand.addListener((command) => {
 });
 
 const main = () => {
-  getStorageSync();
   createContextMenus();
+  getStorageSync();
 };
 
 main();

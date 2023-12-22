@@ -1,4 +1,9 @@
+"use strict";
+
 browser = window.browser;
+
+const INITIAL_PIPED = "piped.video";
+const INITIAL_INVIDIOUS = "yewtu.be";
 
 const saveOptions = (event) => {
   event.preventDefault();
@@ -10,11 +15,12 @@ const saveOptions = (event) => {
 
 const restoreOptions = () => {
   const setCurrentChoicePiped = (result) => {
-    document.querySelector("#piped").value = result.piped || "piped.video";
+    document.querySelector("#piped").value = result.piped || INITIAL_PIPED;
   };
 
   const setCurrentChoiceInvidious = (result) => {
-    document.querySelector("#invidious").value = result.invidious || "yewtu.be";
+    document.querySelector("#invidious").value =
+      result.invidious || INITIAL_INVIDIOUS;
   };
 
   const onError = (error) => {
