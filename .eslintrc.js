@@ -1,4 +1,3 @@
-// .eslintrc.js example
 module.exports = {
   env: {
     browser: true,
@@ -9,4 +8,5 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
+  ignorePatterns: [".eslintrc.js"],
 };
