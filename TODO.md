@@ -1,4 +1,4 @@
 # TODO
 
-- [ ] Set full background in preferences.
-- [ ] Add context menu for opening a YouTube video into a new tab in Piped or Invidious
+- [ ] Set full background in preferences
+- [ ] Clean up code and reduce repetition
