@@ -1,19 +1,19 @@
 # YouTube Alternative Switch
 
-A Firefox extension for quickly switching between YouTube, Piped, Invidious and Chat Replay when watching a video.
+A Firefox extension for quickly switching videos between YouTube, Piped, Invidious and Chat Replay.
 
 ## How to Use
 
-The context menu (accessed by right clicking) and keyboard shortcuts will only work on URLs starting with (by default):
+The following will only work on YouTube, Piped, Invidious, or Chat Replay:
 
-- `https://youtube.com/watch?v=`
-- `https://piped.video/watch?v=`
-- `https://yewtu.be/watch?v=`
-- `https://chatreplay.stream/videos/`
+- Right click a video (link) to open the context menu and choose an alternative website to open the video in (creates a new tab).
+- Right click the web page while watching a video to open the context menu and choose an alternative website to open the video in (replaces current tab).
 
-The Piped and Invidious URLs can be changed in `about:addons` -> YouTube Alternative Switch -> Preferences.
+The Piped and Invidious instances can be configured `about:addons` -> YouTube Alternative Switch -> Preferences.
 
 ### Keyboard Shortcuts
+
+The following will only work while watching a video on YouTube, Piped, Invidious, or Chat Replay:
 
 - `Ctrl+Alt+Y` - Switch to YouTube.
 - `Ctrl+Alt+P` - Switch to Piped.
@@ -35,7 +35,7 @@ pnpm install
 CD to `src` and run:
 
 ```bash
-web-ext build -n youtube-alternative-switch.xpi
+web-ext build --overwrite-dest -n youtube-alternative-switch.xpi
 ```
 
 ## Acknowledgements
