@@ -171,6 +171,20 @@ const createContextMenuOnLink = (title, pattern, websiteUrl) => {
     documentUrlPatterns: [pattern],
     contexts: ["link"],
     onclick(info, tab) {
+      if (
+        pattern === patterns.youtube ||
+        pattern === patterns.piped ||
+        pattern === patterns.invidious
+      ) {
+        if (!info.linkUrl.includes("watch?v=")) {
+          return;
+        }
+      } else if (pattern === patterns.chatReplay) {
+        if (!info.linkUrl.includes("/videos/")) {
+          return;
+        }
+      }
+
       browser.tabs.create({
         index: tab.index + 1,
         url: getNewWebsiteUrl(info.linkUrl, websiteUrl),
