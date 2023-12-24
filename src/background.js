@@ -125,7 +125,7 @@ const getCurrentUrlQuery = (currentUrl) => {
 
 const createContextMenusOnVideo = () => {
   browser.contextMenus.create({
-    title: "Switch to YouTube",
+    title: "Switch Current Tab to YouTube",
     onclick: () => switchWebsiteOnTab(urls.youtube),
     documentUrlPatterns: [
       patternsWatch.piped,
@@ -135,7 +135,7 @@ const createContextMenusOnVideo = () => {
   });
 
   browser.contextMenus.create({
-    title: "Switch to Piped",
+    title: "Switch Current Tab to Piped",
     onclick: () => switchWebsiteOnTab(urls.piped),
     documentUrlPatterns: [
       patternsWatch.youtube,
@@ -145,7 +145,7 @@ const createContextMenusOnVideo = () => {
   });
 
   browser.contextMenus.create({
-    title: "Switch to Invidious",
+    title: "Switch Current Tab to Invidious",
     onclick: () => switchWebsiteOnTab(urls.invidious),
     documentUrlPatterns: [
       patternsWatch.youtube,
@@ -155,7 +155,7 @@ const createContextMenusOnVideo = () => {
   });
 
   browser.contextMenus.create({
-    title: "Switch to Chat Replay",
+    title: "Switch Current Tab to Chat Replay",
     onclick: () => switchWebsiteOnTab(urls.chatReplay),
     documentUrlPatterns: [
       patternsWatch.youtube,
@@ -179,55 +179,72 @@ const createContextMenuOnLink = (title, pattern, websiteUrl) => {
   });
 };
 
-const createContextMenusOnLinksYouTube = () => {
-  createContextMenuOnLink("Open in Piped", patterns.youtube, urls.piped);
-  createContextMenuOnLink(
-    "Open in Invidious",
-    patterns.youtube,
-    urls.invidious,
-  );
-  createContextMenuOnLink(
-    "Open in Chat Replay",
-    patterns.youtube,
-    urls.chatReplay,
-  );
+const createContextMenusOnLinksYouTube = (
+  pipedTitle,
+  invidiousTitle,
+  chatReplayTitle,
+) => {
+  createContextMenuOnLink(pipedTitle, patterns.youtube, urls.piped);
+  createContextMenuOnLink(invidiousTitle, patterns.youtube, urls.invidious);
+  createContextMenuOnLink(chatReplayTitle, patterns.youtube, urls.chatReplay);
 };
 
-const createContextMenusOnLinksPiped = () => {
-  createContextMenuOnLink("Open in YouTube", patterns.piped, urls.youtube);
-  createContextMenuOnLink("Open in Invidious", patterns.piped, urls.invidious);
-  createContextMenuOnLink(
-    "Open in Chat Replay",
-    patterns.piped,
-    urls.chatReplay,
-  );
+const createContextMenusOnLinksPiped = (
+  youtubeTitle,
+  invidiousTitle,
+  chatReplayTitle,
+) => {
+  createContextMenuOnLink(youtubeTitle, patterns.piped, urls.youtube);
+  createContextMenuOnLink(invidiousTitle, patterns.piped, urls.invidious);
+  createContextMenuOnLink(chatReplayTitle, patterns.piped, urls.chatReplay);
 };
 
-const createContextMenusOnLinksInvidious = () => {
-  createContextMenuOnLink("Open in YouTube", patterns.invidious, urls.youtube);
-  createContextMenuOnLink("Open in Piped", patterns.invidious, urls.piped);
-  createContextMenuOnLink(
-    "Open in Chat Replay",
-    patterns.invidious,
-    urls.chatReplay,
-  );
+const createContextMenusOnLinksInvidious = (
+  youtubeTitle,
+  pipedTitle,
+  chatReplayTitle,
+) => {
+  createContextMenuOnLink(youtubeTitle, patterns.invidious, urls.youtube);
+  createContextMenuOnLink(pipedTitle, patterns.invidious, urls.piped);
+  createContextMenuOnLink(chatReplayTitle, patterns.invidious, urls.chatReplay);
 };
 
-const createContextMenusOnLinksChatReplay = () => {
-  createContextMenuOnLink("Open in YouTube", patterns.chatReplay, urls.youtube);
-  createContextMenuOnLink("Open in Piped", patterns.chatReplay, urls.piped);
-  createContextMenuOnLink(
-    "Open in Invidious",
-    patterns.chatReplay,
-    urls.invidious,
-  );
+const createContextMenusOnLinksChatReplay = (
+  youtubeTitle,
+  pipedTitle,
+  invidiousTitle,
+) => {
+  createContextMenuOnLink(youtubeTitle, patterns.chatReplay, urls.youtube);
+  createContextMenuOnLink(pipedTitle, patterns.chatReplay, urls.piped);
+  createContextMenuOnLink(invidiousTitle, patterns.chatReplay, urls.invidious);
 };
 
 const createContextMenus = () => {
-  createContextMenusOnLinksYouTube();
-  createContextMenusOnLinksPiped();
-  createContextMenusOnLinksInvidious();
-  createContextMenusOnLinksChatReplay();
+  const youtubeTitleOnLinks = "Open Link in New YouTube Tab";
+  const pipedTitleOnLinks = "Open Link in New Piped Tab";
+  const invidiousTitleOnLinks = "Open Link in New Invidious Tab";
+  const chatReplayTitleOnLinks = "Open Link in New Chat Replay Tab";
+
+  createContextMenusOnLinksYouTube(
+    pipedTitleOnLinks,
+    invidiousTitleOnLinks,
+    chatReplayTitleOnLinks,
+  );
+  createContextMenusOnLinksPiped(
+    youtubeTitleOnLinks,
+    invidiousTitleOnLinks,
+    chatReplayTitleOnLinks,
+  );
+  createContextMenusOnLinksInvidious(
+    youtubeTitleOnLinks,
+    pipedTitleOnLinks,
+    chatReplayTitleOnLinks,
+  );
+  createContextMenusOnLinksChatReplay(
+    youtubeTitleOnLinks,
+    pipedTitleOnLinks,
+    invidiousTitleOnLinks,
+  );
   createContextMenusOnVideo();
 };
 
