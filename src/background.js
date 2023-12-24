@@ -73,16 +73,21 @@ const getNewWebsiteUrl = (currentUrl, websiteUrl) => {
   return newUrl;
 };
 
-const switchWebsiteOnTab = (websiteUrl) => {
-  browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
-    const currentUrl = tabs[0].url;
+const switchWebsiteOnTab = async (websiteUrl) => {
+  try {
+    const getTabs = browser.tabs.query({ currentWindow: true, active: true });
+    const tabsResult = await getTabs;
+
+    const currentUrl = tabsResult[0].url;
 
     const newUrl = getNewWebsiteUrl(currentUrl, websiteUrl);
 
     browser.tabs.update({
       url: newUrl,
     });
-  });
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
 };
 
 const getCurrentUrlQuery = (currentUrl) => {
