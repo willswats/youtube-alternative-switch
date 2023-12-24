@@ -58,7 +58,7 @@ const getStorageSync = async () => {
 
 const getNewWebsiteUrl = (currentUrl, websiteUrl) => {
   let query = getCurrentUrlQuery(currentUrl);
-  if (query === "") {
+  if (query === "" || query === undefined) {
     return;
   }
 
@@ -94,12 +94,28 @@ const getCurrentUrlQuery = (currentUrl) => {
   let query = "";
 
   if (currentUrl.includes(urls.youtube)) {
+    if (!currentUrl.includes("watch?v=")) {
+      return;
+    }
+
     query = currentUrl.split(urls.youtube)[1];
   } else if (currentUrl.includes(urls.piped)) {
+    if (!currentUrl.includes("watch?v=")) {
+      return;
+    }
+
     query = currentUrl.split(urls.piped)[1];
   } else if (currentUrl.includes(urls.invidious)) {
+    if (!currentUrl.includes("watch?v=")) {
+      return;
+    }
+
     query = currentUrl.split(urls.invidious)[1];
   } else if (currentUrl.includes(urls.chatReplay)) {
+    if (!currentUrl.includes("/videos/")) {
+      return;
+    }
+
     const chatReplaySplitUrl = `${urls.chatReplay}videos/`;
     query = `watch?v=${currentUrl.split(chatReplaySplitUrl)[1]}`;
   }
@@ -149,47 +165,70 @@ const createContextMenusOnVideo = () => {
   });
 };
 
-const createContextMenusOnLinksYouTube = () => {
+const createContextMenuOnLink = (title, pattern, websiteUrl) => {
   browser.contextMenus.create({
-    title: "Open in Piped",
-    documentUrlPatterns: [patterns.youtube],
+    title: title,
+    documentUrlPatterns: [pattern],
     contexts: ["link"],
     onclick(info, tab) {
       browser.tabs.create({
         index: tab.index + 1,
-        url: getNewWebsiteUrl(info.linkUrl, urls.piped),
-      });
-    },
-  });
-
-  browser.contextMenus.create({
-    title: "Open in Invidious",
-    documentUrlPatterns: [patterns.youtube],
-    contexts: ["link"],
-    onclick(info, tab) {
-      browser.tabs.create({
-        index: tab.index + 1,
-        url: getNewWebsiteUrl(info.linkUrl, urls.invidious),
-      });
-    },
-  });
-
-  browser.contextMenus.create({
-    title: "Open in Chat Replay",
-    documentUrlPatterns: [patterns.youtube],
-    contexts: ["link"],
-    onclick(info, tab) {
-      browser.tabs.create({
-        index: tab.index + 1,
-        url: getNewWebsiteUrl(info.linkUrl, urls.chatReplay),
+        url: getNewWebsiteUrl(info.linkUrl, websiteUrl),
       });
     },
   });
 };
 
+const createContextMenusOnLinksYouTube = () => {
+  createContextMenuOnLink("Open in Piped", patterns.youtube, urls.piped);
+  createContextMenuOnLink(
+    "Open in Invidious",
+    patterns.youtube,
+    urls.invidious,
+  );
+  createContextMenuOnLink(
+    "Open in Chat Replay",
+    patterns.youtube,
+    urls.chatReplay,
+  );
+};
+
+const createContextMenusOnLinksPiped = () => {
+  createContextMenuOnLink("Open in YouTube", patterns.piped, urls.youtube);
+  createContextMenuOnLink("Open in Invidious", patterns.piped, urls.invidious);
+  createContextMenuOnLink(
+    "Open in Chat Replay",
+    patterns.piped,
+    urls.chatReplay,
+  );
+};
+
+const createContextMenusOnLinksInvidious = () => {
+  createContextMenuOnLink("Open in YouTube", patterns.invidious, urls.youtube);
+  createContextMenuOnLink("Open in Piped", patterns.invidious, urls.piped);
+  createContextMenuOnLink(
+    "Open in Chat Replay",
+    patterns.invidious,
+    urls.chatReplay,
+  );
+};
+
+const createContextMenusOnLinksChatReplay = () => {
+  createContextMenuOnLink("Open in YouTube", patterns.chatReplay, urls.youtube);
+  createContextMenuOnLink("Open in Piped", patterns.chatReplay, urls.piped);
+  createContextMenuOnLink(
+    "Open in Invidious",
+    patterns.chatReplay,
+    urls.invidious,
+  );
+};
+
 const createContextMenus = () => {
-  createContextMenusOnVideo();
   createContextMenusOnLinksYouTube();
+  createContextMenusOnLinksPiped();
+  createContextMenusOnLinksInvidious();
+  createContextMenusOnLinksChatReplay();
+  createContextMenusOnVideo();
 };
 
 browser.storage.onChanged.addListener(({ piped, invidious }) => {
