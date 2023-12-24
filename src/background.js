@@ -10,6 +10,13 @@ let urls = {
 };
 
 let patterns = {
+  youtube: "*://*.youtube.com/*",
+  chatReplay: "*://chatreplay.stream/*",
+  piped: "*://piped.video/*",
+  invidious: "*://yewtu.be/*",
+};
+
+let patternsWatch = {
   youtube: "*://*.youtube.com/watch?v=*",
   chatReplay: "*://chatreplay.stream/videos/*",
   piped: "*://piped.video/watch?v=*",
@@ -20,14 +27,16 @@ const getStorageSync = async () => {
   const setPiped = ({ piped }) => {
     if (piped !== undefined) {
       urls.piped = `https://${piped}/`;
-      patterns.piped = `*://${piped}/watch?v=*`;
+      patterns.piped = `*://${piped}/*`;
+      patternsWatch.piped = `*://${piped}/watch?v=*`;
     }
   };
 
   const setInvidious = ({ invidious }) => {
     if (invidious !== undefined) {
       urls.invidious = `https://${invidious}/`;
-      patterns.invidious = `*://${invidious}/watch?v=*`;
+      patterns.invidious = `*://${invidious}/*`;
+      patternsWatch.invidious = `*://${invidious}/watch?v=*`;
     }
   };
 
@@ -47,22 +56,28 @@ const getStorageSync = async () => {
   }
 };
 
-const switchWebsite = (websiteUrl) => {
+const getNewWebsiteUrl = (currentUrl, websiteUrl) => {
+  let query = getCurrentUrlQuery(currentUrl);
+  if (query === "") {
+    return;
+  }
+
+  let newUrl = websiteUrl + query;
+  let chatReplayUrlConverted = `${currentUrl.split("videos/")[0]}watch?v=${currentUrl.split("videos/")[1]
+    }`;
+
+  if (newUrl === currentUrl || newUrl === chatReplayUrlConverted) {
+    return;
+  }
+
+  return newUrl;
+};
+
+const switchWebsiteOnTab = (websiteUrl) => {
   browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     const currentUrl = tabs[0].url;
 
-    let query = getCurrentUrlQuery(currentUrl);
-    if (query === "") {
-      return;
-    }
-
-    let newUrl = websiteUrl + query;
-    let chatReplayUrlConverted = `${currentUrl.split("videos/")[0]}watch?v=${currentUrl.split("videos/")[1]
-      }`;
-
-    if (newUrl === currentUrl || newUrl === chatReplayUrlConverted) {
-      return;
-    }
+    const newUrl = getNewWebsiteUrl(currentUrl, websiteUrl);
 
     browser.tabs.update({
       url: newUrl,
@@ -87,50 +102,99 @@ const getCurrentUrlQuery = (currentUrl) => {
   return query;
 };
 
-const createContextMenus = () => {
+const createContextMenusOnVideo = () => {
   browser.contextMenus.create({
     title: "Switch to YouTube",
-    onclick: () => switchWebsite(urls.youtube),
+    onclick: () => switchWebsiteOnTab(urls.youtube),
     documentUrlPatterns: [
-      patterns.piped,
-      patterns.invidious,
-      patterns.chatReplay,
+      patternsWatch.piped,
+      patternsWatch.invidious,
+      patternsWatch.chatReplay,
     ],
   });
 
   browser.contextMenus.create({
     title: "Switch to Piped",
-    onclick: () => switchWebsite(urls.piped),
+    onclick: () => switchWebsiteOnTab(urls.piped),
     documentUrlPatterns: [
-      patterns.youtube,
-      patterns.invidious,
-      patterns.chatReplay,
+      patternsWatch.youtube,
+      patternsWatch.invidious,
+      patternsWatch.chatReplay,
     ],
   });
 
   browser.contextMenus.create({
     title: "Switch to Invidious",
-    onclick: () => switchWebsite(urls.invidious),
+    onclick: () => switchWebsiteOnTab(urls.invidious),
     documentUrlPatterns: [
-      patterns.youtube,
-      patterns.piped,
-      patterns.chatReplay,
+      patternsWatch.youtube,
+      patternsWatch.piped,
+      patternsWatch.chatReplay,
     ],
   });
 
   browser.contextMenus.create({
     title: "Switch to Chat Replay",
-    onclick: () => switchWebsite(urls.chatReplay),
-    documentUrlPatterns: [patterns.youtube, patterns.piped, patterns.invidious],
+    onclick: () => switchWebsiteOnTab(urls.chatReplay),
+    documentUrlPatterns: [
+      patternsWatch.youtube,
+      patternsWatch.piped,
+      patternsWatch.invidious,
+    ],
   });
+};
+
+const createContextMenusOnLinksYouTube = () => {
+  browser.contextMenus.create({
+    title: "Open in Piped",
+    documentUrlPatterns: [patterns.youtube],
+    contexts: ["link"],
+    onclick(info, tab) {
+      browser.tabs.create({
+        index: tab.index + 1,
+        url: getNewWebsiteUrl(info.linkUrl, urls.piped),
+      });
+    },
+  });
+
+  browser.contextMenus.create({
+    title: "Open in Invidious",
+    documentUrlPatterns: [patterns.youtube],
+    contexts: ["link"],
+    onclick(info, tab) {
+      browser.tabs.create({
+        index: tab.index + 1,
+        url: getNewWebsiteUrl(info.linkUrl, urls.invidious),
+      });
+    },
+  });
+
+  browser.contextMenus.create({
+    title: "Open in Chat Replay",
+    documentUrlPatterns: [patterns.youtube],
+    contexts: ["link"],
+    onclick(info, tab) {
+      browser.tabs.create({
+        index: tab.index + 1,
+        url: getNewWebsiteUrl(info.linkUrl, urls.chatReplay),
+      });
+    },
+  });
+};
+
+const createContextMenus = () => {
+  createContextMenusOnVideo();
+  createContextMenusOnLinksYouTube();
 };
 
 browser.storage.onChanged.addListener(({ piped, invidious }) => {
   urls.piped = `https://${piped.newValue}/`;
-  patterns.piped = `*://${piped.newValue}/watch?v=*`;
+  patterns.piped = `*://${piped.newValue}/*`;
+  patternsWatch.piped = `*://${piped.newValue}/watch?v=*`;
 
   urls.invidious = `https://${invidious.newValue}/`;
-  patterns.invidious = `*://${invidious.newValue}/watch?v=*`;
+  patterns.invidious = `*://${invidious.newValue}/*`;
+  patternsWatch.invidious = `*://${invidious.newValue}/watch?v=*`;
 
   browser.contextMenus.removeAll();
   createContextMenus();
@@ -138,13 +202,13 @@ browser.storage.onChanged.addListener(({ piped, invidious }) => {
 
 browser.commands.onCommand.addListener((command) => {
   if (command == "switch-youtube") {
-    switchWebsite(urls.youtube);
+    switchWebsiteOnTab(urls.youtube);
   } else if (command === "switch-piped") {
-    switchWebsite(urls.piped);
+    switchWebsiteOnTab(urls.piped);
   } else if (command === "switch-invidious") {
-    switchWebsite(urls.invidious);
+    switchWebsiteOnTab(urls.invidious);
   } else if (command === "switch-chat-replay") {
-    switchWebsite(urls.chatReplay);
+    switchWebsiteOnTab(urls.chatReplay);
   }
 });
 
