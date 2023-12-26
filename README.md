@@ -2,23 +2,32 @@
 
 A Firefox extension for quickly switching videos between YouTube, Piped, Invidious and Chat Replay.
 
-## How to Use
+## Features
 
-The following will only work on YouTube, Piped, Invidious, or Chat Replay:
+The features described here will only work on YouTube, Piped (default is `piped.video`), Invidious (default is `yewtu.be`), and Chat Replay.
 
-- Right click a video (link) to open the context menu and choose an alternative website to open the video in (creates a new tab).
-- Right click the web page while watching a video to open the context menu and choose an alternative website to open the video in (replaces current tab).
+- Right click a web page while watching a video to reveal a context menu that allows you to; open the video in an alternative front-end while replacing the current tab, or open the video in an alternative front-end while creating a new tab.
+- Right click a video link (e.g. YouTube thumbnail) to choose an alternative front-end to open the video in (creates a new tab).
 
 The Piped and Invidious instances can be configured `about:addons` -> YouTube Alternative Switch -> Preferences.
 
-### Keyboard Shortcuts
+## Keyboard Shortcuts
 
-The following will only work while watching a video on YouTube, Piped, Invidious, or Chat Replay:
+The keyboard shortcuts will only work while watching a video on YouTube, Piped, Invidious, or Chat Replay.
 
-- `Ctrl+Alt+Y` - Switch to YouTube.
-- `Ctrl+Alt+P` - Switch to Piped.
-- `Ctrl+Alt+I` - Switch to Invidious.
-- `Ctrl+Alt+C` - Switch to Chat Replay.
+### Create New Tab
+
+- `Ctrl+Alt+Y` - Open Current Tab in New YouTube Tab.
+- `Ctrl+Alt+P` - Open Current Tab in New Piped Tab.
+- `Ctrl+Alt+I` - Open Current Tab in New Invidious Tab.
+- `Ctrl+Alt+C` - Open Current Tab in New Chat Replay Tab.
+
+### Replace Current Tab
+
+- `Shift+Alt+Y` - Switch Current Tab to YouTube.
+- `Shift+Alt+P` - Switch Current Tab to Piped.
+- `Shift+Alt+I` - Switch Current Tab to Invidious.
+- `Shift+Alt+C` - Switch Current Tab to Chat Replay.
 
 The keyboard shortcuts can be changed in `about:addons` -> Manage Extension Shortcuts.
 
