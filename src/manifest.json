@@ -1,6 +1,6 @@
 {
   "name": "YouTube Alternative Switch",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Quickly switch videos between YouTube, Piped, Invidious and Chat Replay.",
   "permissions": [
     "tabs",
