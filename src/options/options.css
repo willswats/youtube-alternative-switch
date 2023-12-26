@@ -14,6 +14,7 @@ body {
 
 fieldset {
   background-color: #711d1a;
+  font-size: 1.2rem;
   padding: 0.5rem;
   border: none;
   border-radius: 0.5rem;
@@ -23,6 +24,7 @@ fieldset {
 input {
   color: #fff;
   background-color: #551614;
+  font-size: 1.2rem;
   padding: 0.5rem;
   width: 20rem;
   border: none;
