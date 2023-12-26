@@ -56,6 +56,68 @@ const getStorageSync = async () => {
   }
 };
 
+const switchWebsiteCurrentTab = async (websiteUrl) => {
+  try {
+    const getTabs = browser.tabs.query({ currentWindow: true, active: true });
+    const tabsResult = await getTabs;
+
+    const currentUrl = tabsResult[0].url;
+
+    const newUrl = getNewWebsiteUrl(currentUrl, websiteUrl);
+    if (newUrl === undefined) {
+      return;
+    }
+
+    browser.tabs.update({
+      url: newUrl,
+    });
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
+};
+
+const switchWebsiteNewTab = async (websiteUrl) => {
+  try {
+    const getTabs = browser.tabs.query({ currentWindow: true, active: true });
+    const tabsResult = await getTabs;
+
+    const currentUrl = tabsResult[0].url;
+
+    const newUrl = getNewWebsiteUrl(currentUrl, websiteUrl);
+    if (newUrl === undefined) {
+      return;
+    }
+
+    browser.tabs.create({
+      index: tabsResult[0].index + 1,
+      url: newUrl,
+    });
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
+};
+
+const switchWebsiteNewTabLink = (info, tab, pattern, websiteUrl) => {
+  if (
+    pattern === patterns.youtube ||
+    pattern === patterns.piped ||
+    pattern === patterns.invidious
+  ) {
+    if (!info.linkUrl.includes("watch?v=")) {
+      return;
+    }
+  } else if (pattern === patterns.chatReplay) {
+    if (!info.linkUrl.includes("/videos/")) {
+      return;
+    }
+  }
+
+  browser.tabs.create({
+    index: tab.index + 1,
+    url: getNewWebsiteUrl(info.linkUrl, websiteUrl),
+  });
+};
+
 const getNewWebsiteUrl = (currentUrl, websiteUrl) => {
   let query = getCurrentUrlQuery(currentUrl);
   if (query === "" || query === undefined) {
@@ -71,23 +133,6 @@ const getNewWebsiteUrl = (currentUrl, websiteUrl) => {
   }
 
   return newUrl;
-};
-
-const switchWebsiteOnTab = async (websiteUrl) => {
-  try {
-    const getTabs = browser.tabs.query({ currentWindow: true, active: true });
-    const tabsResult = await getTabs;
-
-    const currentUrl = tabsResult[0].url;
-
-    const newUrl = getNewWebsiteUrl(currentUrl, websiteUrl);
-
-    browser.tabs.update({
-      url: newUrl,
-    });
-  } catch (error) {
-    console.log(`Error: ${error}`);
-  }
 };
 
 const getCurrentUrlQuery = (currentUrl) => {
@@ -125,8 +170,48 @@ const getCurrentUrlQuery = (currentUrl) => {
 
 const createContextMenusOnVideo = () => {
   browser.contextMenus.create({
+    title: "Open Current Tab in New YouTube Tab",
+    onclick: () => switchWebsiteNewTab(urls.youtube),
+    documentUrlPatterns: [
+      patternsWatch.piped,
+      patternsWatch.invidious,
+      patternsWatch.chatReplay,
+    ],
+  });
+
+  browser.contextMenus.create({
+    title: "Open Current Tab in New Piped Tab",
+    onclick: () => switchWebsiteNewTab(urls.piped),
+    documentUrlPatterns: [
+      patternsWatch.youtube,
+      patternsWatch.invidious,
+      patternsWatch.chatReplay,
+    ],
+  });
+
+  browser.contextMenus.create({
+    title: "Open Current Tab in New Invidious Tab",
+    onclick: () => switchWebsiteNewTab(urls.invidious),
+    documentUrlPatterns: [
+      patternsWatch.youtube,
+      patternsWatch.piped,
+      patternsWatch.chatReplay,
+    ],
+  });
+
+  browser.contextMenus.create({
+    title: "Open Current Tab in New Chat Replay Tab",
+    onclick: () => switchWebsiteNewTab(urls.chatReplay),
+    documentUrlPatterns: [
+      patternsWatch.youtube,
+      patternsWatch.piped,
+      patternsWatch.invidious,
+    ],
+  });
+
+  browser.contextMenus.create({
     title: "Switch Current Tab to YouTube",
-    onclick: () => switchWebsiteOnTab(urls.youtube),
+    onclick: () => switchWebsiteCurrentTab(urls.youtube),
     documentUrlPatterns: [
       patternsWatch.piped,
       patternsWatch.invidious,
@@ -136,7 +221,7 @@ const createContextMenusOnVideo = () => {
 
   browser.contextMenus.create({
     title: "Switch Current Tab to Piped",
-    onclick: () => switchWebsiteOnTab(urls.piped),
+    onclick: () => switchWebsiteCurrentTab(urls.piped),
     documentUrlPatterns: [
       patternsWatch.youtube,
       patternsWatch.invidious,
@@ -146,7 +231,7 @@ const createContextMenusOnVideo = () => {
 
   browser.contextMenus.create({
     title: "Switch Current Tab to Invidious",
-    onclick: () => switchWebsiteOnTab(urls.invidious),
+    onclick: () => switchWebsiteCurrentTab(urls.invidious),
     documentUrlPatterns: [
       patternsWatch.youtube,
       patternsWatch.piped,
@@ -156,7 +241,7 @@ const createContextMenusOnVideo = () => {
 
   browser.contextMenus.create({
     title: "Switch Current Tab to Chat Replay",
-    onclick: () => switchWebsiteOnTab(urls.chatReplay),
+    onclick: () => switchWebsiteCurrentTab(urls.chatReplay),
     documentUrlPatterns: [
       patternsWatch.youtube,
       patternsWatch.piped,
@@ -171,24 +256,7 @@ const createContextMenuOnLink = (title, pattern, websiteUrl) => {
     documentUrlPatterns: [pattern],
     contexts: ["link"],
     onclick(info, tab) {
-      if (
-        pattern === patterns.youtube ||
-        pattern === patterns.piped ||
-        pattern === patterns.invidious
-      ) {
-        if (!info.linkUrl.includes("watch?v=")) {
-          return;
-        }
-      } else if (pattern === patterns.chatReplay) {
-        if (!info.linkUrl.includes("/videos/")) {
-          return;
-        }
-      }
-
-      browser.tabs.create({
-        index: tab.index + 1,
-        url: getNewWebsiteUrl(info.linkUrl, websiteUrl),
-      });
+      switchWebsiteNewTabLink(info, tab, pattern, websiteUrl);
     },
   });
 };
@@ -276,14 +344,22 @@ browser.storage.onChanged.addListener(({ piped, invidious }) => {
 });
 
 browser.commands.onCommand.addListener((command) => {
-  if (command == "switch-youtube") {
-    switchWebsiteOnTab(urls.youtube);
-  } else if (command === "switch-piped") {
-    switchWebsiteOnTab(urls.piped);
-  } else if (command === "switch-invidious") {
-    switchWebsiteOnTab(urls.invidious);
-  } else if (command === "switch-chat-replay") {
-    switchWebsiteOnTab(urls.chatReplay);
+  if (command == "switch-current-tab-youtube") {
+    switchWebsiteCurrentTab(urls.youtube);
+  } else if (command === "switch-current-tab-piped") {
+    switchWebsiteCurrentTab(urls.piped);
+  } else if (command === "switch-current-tab-invidious") {
+    switchWebsiteCurrentTab(urls.invidious);
+  } else if (command === "switch-current-tab-chat-replay") {
+    switchWebsiteCurrentTab(urls.chatReplay);
+  } else if (command === "switch-new-tab-youtube") {
+    switchWebsiteNewTab(urls.youtube);
+  } else if (command === "switch-new-tab-piped") {
+    switchWebsiteNewTab(urls.piped);
+  } else if (command === "switch-new-tab-invidious") {
+    switchWebsiteNewTab(urls.invidious);
+  } else if (command === "switch-new-tab-chat-replay") {
+    switchWebsiteNewTab(urls.chatReplay);
   }
 });
 
