@@ -4,7 +4,7 @@ A Firefox extension for quickly switching videos between YouTube, Piped, Invidio
 
 ## Features
 
-The features described here will only work on YouTube, Piped (default is `piped.video`), Invidious (default is `yewtu.be`), and Chat Replay.
+The features described here will only work on YouTube, Piped (default is [piped.video](https://piped.video)), Invidious (default is [yewtu.be](https://yewtu.be)), and Chat Replay.
 
 - Right click a web page while watching a video to reveal a context menu that allows you to; open the video in an alternative front-end while replacing the current tab, or open the video in an alternative front-end while creating a new tab.
 - Right click a video link (e.g. YouTube thumbnail) to choose an alternative front-end to open the video in (creates a new tab).
