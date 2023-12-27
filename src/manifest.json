@@ -31,49 +31,49 @@
       "suggested_key": {
         "default": "Shift+Alt+Y"
       },
-      "description": "Switch Current Tab to YouTube."
+      "description": "Switch Current Tab to YouTube"
     },
     "switch-current-tab-piped": {
       "suggested_key": {
         "default": "Shift+Alt+P"
       },
-      "description": "Switch Current Tab to Piped."
+      "description": "Switch Current Tab to Piped"
     },
     "switch-current-tab-invidious": {
       "suggested_key": {
         "default": "Shift+Alt+I"
       },
-      "description": "Switch Current Tab to Invidious."
+      "description": "Switch Current Tab to Invidious"
     },
     "switch-current-tab-chat-replay": {
       "suggested_key": {
         "default": "Shift+Alt+C"
       },
-      "description": "Switch Current Tab to Chat Replay."
+      "description": "Switch Current Tab to Chat Replay"
     },
     "switch-new-tab-youtube": {
       "suggested_key": {
         "default": "Ctrl+Alt+Y"
       },
-      "description": "Open Current Tab in New YouTube Tab."
+      "description": "Open Current Tab in New YouTube Tab"
     },
     "switch-new-tab-piped": {
       "suggested_key": {
         "default": "Ctrl+Alt+P"
       },
-      "description": "Open Current Tab in New Piped Tab."
+      "description": "Open Current Tab in New Piped Tab"
     },
     "switch-new-tab-invidious": {
       "suggested_key": {
         "default": "Ctrl+Alt+I"
       },
-      "description": "Open Current Tab in New Invidious Tab."
+      "description": "Open Current Tab in New Invidious Tab"
     },
     "switch-new-tab-chat-replay": {
       "suggested_key": {
         "default": "Ctrl+Alt+C"
       },
-      "description": "Open Current Tab in New Chat Replay Tab."
+      "description": "Open Current Tab in New Chat Replay Tab"
     }
   }
 }
