@@ -125,8 +125,7 @@ const getNewWebsiteUrl = (currentUrl, websiteUrl) => {
   }
 
   let newUrl = websiteUrl + query;
-  let chatReplayUrlConverted = `${currentUrl.split("videos/")[0]}watch?v=${currentUrl.split("videos/")[1]
-    }`;
+  let chatReplayUrlConverted = `${currentUrl.split("videos/")[0]}watch?v=${currentUrl.split("videos/")[1]}`;
 
   if (newUrl === currentUrl || newUrl === chatReplayUrlConverted) {
     return;
@@ -344,22 +343,34 @@ browser.storage.onChanged.addListener(({ piped, invidious }) => {
 });
 
 browser.commands.onCommand.addListener((command) => {
-  if (command == "switch-current-tab-youtube") {
-    switchWebsiteCurrentTab(urls.youtube);
-  } else if (command === "switch-current-tab-piped") {
-    switchWebsiteCurrentTab(urls.piped);
-  } else if (command === "switch-current-tab-invidious") {
-    switchWebsiteCurrentTab(urls.invidious);
-  } else if (command === "switch-current-tab-chat-replay") {
-    switchWebsiteCurrentTab(urls.chatReplay);
-  } else if (command === "switch-new-tab-youtube") {
-    switchWebsiteNewTab(urls.youtube);
-  } else if (command === "switch-new-tab-piped") {
-    switchWebsiteNewTab(urls.piped);
-  } else if (command === "switch-new-tab-invidious") {
-    switchWebsiteNewTab(urls.invidious);
-  } else if (command === "switch-new-tab-chat-replay") {
-    switchWebsiteNewTab(urls.chatReplay);
+  switch (command) {
+    case "switch-current-tab-youtube":
+      switchWebsiteCurrentTab(urls.youtube);
+      break;
+    case "switch-current-tab-piped":
+      switchWebsiteCurrentTab(urls.piped);
+      break;
+    case "switch-current-tab-invidious":
+      switchWebsiteCurrentTab(urls.invidious);
+      break;
+    case "switch-current-tab-chat-replay":
+      switchWebsiteCurrentTab(urls.chatReplay);
+      break;
+    case "switch-new-tab-youtube":
+      switchWebsiteNewTab(urls.youtube);
+      break;
+    case "switch-new-tab-piped":
+      switchWebsiteNewTab(urls.piped);
+      break;
+    case "switch-new-tab-invidious":
+      switchWebsiteNewTab(urls.invidious);
+      break;
+    case "switch-new-tab-chat-replay":
+      switchWebsiteNewTab(urls.chatReplay);
+      break;
+    default:
+      console.log("Error: Invalid command");
+      break;
   }
 });
 
