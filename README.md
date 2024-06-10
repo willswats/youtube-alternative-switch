@@ -2,6 +2,8 @@
 
 A Firefox extension for quickly switching videos between YouTube, Piped, Invidious and Chat Replay.
 
+[addons.mozilla.org/en-US/firefox/addon/youtube-alternative-switch/](https://addons.mozilla.org/en-US/firefox/addon/youtube-alternative-switch/)
+
 ## Features
 
 The features described here will only work on YouTube, Piped (default is [piped.video](https://piped.video)), Invidious (default is [yewtu.be](https://yewtu.be)), and Chat Replay.
